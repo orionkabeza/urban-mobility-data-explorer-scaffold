@@ -76,4 +76,4 @@ _Link to the architecture diagram: TBD (owner: aubin_00)_
 
 ## Scrum Board
 
-_Link to the Scrum board (e.g. GitHub Projects / Trello / Jira): TBD (owner: aubin_00)_
+[Trello board](https://trello.com/b/gDQLVtpx/enterprise-web-dev-momo-data-explorer)
