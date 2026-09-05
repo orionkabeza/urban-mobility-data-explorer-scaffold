@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Environment
+.env
+
+# Raw/processed MoMo data and logs (keep .gitkeep, ignore real contents)
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/logs/*
+!data/logs/dead_letter/
+data/logs/dead_letter/*
+!data/logs/dead_letter/.gitkeep
+
+# OS
+.DS_Store
