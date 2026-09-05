@@ -72,7 +72,9 @@ implemented._
 
 ## Architecture Diagram
 
-_Link to the architecture diagram: TBD (owner: aubin_00)_
+![System architecture diagram](docs/architecture.png)
+
+The pipeline: `MoMo SMS XML` -> ETL (`parse -> clean -> categorize -> load`) -> `SQLite DB`, with invalid records routed to a dead-letter log. The API layer (FastAPI) is optional/bonus; the frontend dashboard reads either from the API or directly from the processed data if the API is skipped.
 
 ## Scrum Board
 
