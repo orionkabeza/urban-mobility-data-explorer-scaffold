@@ -21,9 +21,27 @@ frontend dashboard visualizes the processed data.
 
 | Name | Role | GitHub |
 | --- | --- | --- |
-| _TBD_ | _TBD_ | _TBD_ |
-| _TBD_ | _TBD_ | _TBD_ |
-| _TBD_ | _TBD_ | _TBD_ |
+| Orion Kabeza | Team Lead & ETL (parsing) | [orionkabeza](https://github.com/orionkabeza) |
+| Mpamira Ntwali Djibril | ETL (cleaning & categorization) | [dmpamira-debug](https://github.com/dmpamira-debug) |
+| Emmanuel Happy Rangira | Database & Backend API | [erangira-005](https://github.com/erangira-005) |
+| kmaster-alt | Frontend Dashboard | [kmaster-alt](https://github.com/kmaster-alt) |
+| aubin_00 | Architecture & Scrum Board | [zotyall](https://github.com/zotyall) |
+
+## Week 1 Task Assignments
+
+| Task | Owner | Status |
+| --- | --- | --- |
+| Repo setup & invite collaborators | Orion Kabeza | Done |
+| Project directory scaffold | Orion Kabeza | Done |
+| README (team, description, links) | Orion Kabeza | In Progress |
+| System architecture diagram (draw.io/Miro) | aubin_00 | To Do |
+| Scrum board setup (GitHub Projects/Trello/Jira) | aubin_00 | To Do |
+| XML parsing (`etl/parse_xml.py`, `tests/test_parse_xml.py`) | Orion Kabeza | To Do |
+| Cleaning & normalization (`etl/clean_normalize.py`, `tests/test_clean_normalize.py`) | Mpamira Ntwali Djibril | To Do |
+| Categorization rules (`etl/categorize.py`, `tests/test_categorize.py`) | Mpamira Ntwali Djibril | To Do |
+| DB schema & loader (`etl/load_db.py`) | Emmanuel Happy Rangira | To Do |
+| Backend API (`api/app.py`, `api/db.py`, `api/schemas.py`) | Emmanuel Happy Rangira | To Do |
+| Frontend dashboard (`index.html`, `web/`) | kmaster-alt | To Do |
 
 ## Setup & Run Instructions
 
@@ -54,8 +72,8 @@ implemented._
 
 ## Architecture Diagram
 
-_Link to the architecture diagram: TBD_
+_Link to the architecture diagram: TBD (owner: aubin_00)_
 
 ## Scrum Board
 
-_Link to the Scrum board (e.g. GitHub Projects / Trello / Jira): TBD_
+_Link to the Scrum board (e.g. GitHub Projects / Trello / Jira): TBD (owner: aubin_00)_
