@@ -1,0 +1,6 @@
+lxml
+python-dateutil
+
+# Optional / bonus: REST API layer for the dashboard
+# fastapi
+# uvicorn
