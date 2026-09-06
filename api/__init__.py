@@ -1,1 +1,1 @@
-"""API package: exposes processed MoMo transaction data to the frontend dashboard."""
+"""API package: exposes processed MOMO transaction data to the frontend dashboard."""
