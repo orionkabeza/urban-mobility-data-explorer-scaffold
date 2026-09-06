@@ -11,11 +11,11 @@ _TBD_
 
 ## Project Description
 
-This project is built around processing MoMo SMS transaction data that comes in XML format.
-The data goes through an ETL pipeline where it is parsed, cleaned, normalized, and sorted into different 
-transaction categories before being stored in a relational database. Once the data is ready, a lightweight 
-frontend dashboard is used to display and visualize it in a meaningful way. 
-This serves as the foundation for the larger **Urban Mobility Data Explorer project**
+-This project is built around processing MoMo SMS transaction data that comes in XML format.
+-The data goes through an ETL pipeline where it is parsed, cleaned, normalized, and sorted into different 
+-transaction categories before being stored in a relational database. Once the data is ready, a lightweight 
+-frontend dashboard is used to display and visualize it in a meaningful way. 
+-This serves as the foundation for the larger **Urban Mobility Data Explorer project**
 
 ## Team Members
 
