@@ -10,11 +10,11 @@ _TBD_
 
 ## Project Description
 
-This project builds an ETL pipeline and dashboard for MoMo SMS transaction
-data as the foundation for the **Urban Mobility Data Explorer** summative
-project. Raw XML SMS exports are parsed, cleaned/normalized, categorized by
-transaction type, and loaded into a relational database. A lightweight
-frontend dashboard visualizes the processed data.
+This project is built around processing MoMo SMS transaction data that comes in XML format.
+
+The data goes through an ETL pipeline where it is parsed, cleaned, normalized, and sorted into different transaction categories before being stored in a relational database.
+
+Once the data is ready, a lightweight frontend dashboard is used to display and visualize it in a meaningful way. This serves as the foundation for the larger **Urban Mobility Data Explorer project.**
 
 ## Team Members
 
@@ -34,7 +34,7 @@ frontend dashboard visualizes the processed data.
 | Project directory scaffold | Orion Kabeza | Done |
 | README (team, description, links) | Orion Kabeza | In Progress |
 | System architecture diagram (draw.io/Miro) | aubin_00 | To Do |
-| Scrum board setup (GitHub Projects/Trello/Jira) | aubin_00 | To Do |
+| Scrum board setup (GitHub Projects/Trello/Jira) | aubin_00 | Done |
 | XML parsing (`etl/parse_xml.py`, `tests/test_parse_xml.py`) | Orion Kabeza | To Do |
 | Cleaning & normalization (`etl/clean_normalize.py`, `tests/test_clean_normalize.py`) | Mpamira Ntwali Djibril | To Do |
 | Categorization rules (`etl/categorize.py`, `tests/test_categorize.py`) | Mpamira Ntwali Djibril | To Do |
@@ -121,4 +121,4 @@ The pipeline: `MoMo SMS XML` -> ETL (`parse -> clean -> categorize -> load`) -> 
 
 ## Scrum Board
 
-[Trello board](https://trello.com/b/gDQLVtpx/enterprise-web-dev-momo-data-explorer)
+[Trello board](https://trello.com/invite/b/6a9b871ca635a4268f44d10d/ATTIeac71249d169effb450ef9518f18446385DF072A/my-trello-board)
