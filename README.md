@@ -44,26 +44,35 @@ Once the data is ready, a lightweight frontend dashboard is used to display and 
 
 ## Week 2 Task Assignments
 
-Orion drafted a full working schema (`database/database_setup.sql`,
-`docs/erd_diagram.drawio`, `examples/json_schemas.json`) as a starting point
-so the team could see the whole design at once. **That draft is currently
-all committed under one author** — per the grading rule that individual
-marks come strictly from technical contributions visible in `git log`/`git
-blame`, each owner below needs to re-commit their section themselves
-(edit, extend, or at minimum re-save-and-commit their block) before
-submission, not just leave Orion's draft as-is:
+Orion drafted a full working schema as a starting point so the team could
+see the whole design at once; each owner below then made their own real
+schema improvement and committed it individually (see `git log` for
+per-author commits, and each merged PR on GitHub) so individual marks are
+backed by real, attributable contributions:
 
 | Task | Owner | Status |
 | --- | --- | --- |
-| `sms_messages` table (DDL, indexes, sample data) | Orion Kabeza | Committed by Orion |
-| ERD render, design doc, MySQL 8.0 verification screenshots, final integration commit merging all table blocks into one working script | Orion Kabeza | Committed by Orion; integration pending until others commit their sections |
-| `transactions` + `transaction_participants` tables (hub + M:N junction, FK/CHECK constraints) | Emmanuel Happy Rangira | Drafted by Orion — needs Emmanuel's own commit |
-| `users` table (DDL/DML) | Kenneth Master | Drafted by Orion — needs Kenneth's own commit |
-| `examples/json_schemas.json` (JSON serialization modeling) | Kenneth Master | Drafted by Orion — needs Kenneth's own commit |
-| `transaction_categories` table (DDL/DML) | Mfura Axel Aubin | Drafted by Orion — needs Mfura's own commit |
-| `docs/erd_diagram.drawio` (editable ERD source) | Mfura Axel Aubin | Drafted by Orion — needs Mfura's own commit |
-| Sample-query section of the design doc, run against MySQL 8.0 | Mfura Axel Aubin | Drafted by Orion — needs Mfura's own commit |
-| `system_logs` table (DDL/DML, ETL audit trail) | Mpamira Ntwali Djibril | Drafted by Orion — needs Djibril's own commit |
+| `sms_messages` table (DDL, indexes, sample data) | Orion Kabeza | Done |
+| ERD render, design doc, MySQL 8.0 verification screenshots, final integration merging all branches into `main` | Orion Kabeza | Done |
+| `transactions` + `transaction_participants` tables — self-reversal CHECK constraint + lookup indexes ([PR #1](pull/1)) | Emmanuel Happy Rangira | Done |
+| `users` table + `examples/json_schemas.json` — 2 new users from source SMS data + paginated user-list example ([PR #2](pull/2)) | Kenneth Master | Done |
+| `transaction_categories` table — `is_active` column; ERD rebuilt in draw.io with full crow's-foot notation | Mfura Axel Aubin | Done ([erd_diagram.png](docs/erd_diagram.png) updated; see note below) |
+| `system_logs` table — `run_id` tracing column + dead-letter integrity CHECK ([PR #3](pull/3)) | Mpamira Ntwali Djibril | Done |
+
+All four PRs merged into `main`; the combined `database/database_setup.sql`
+has been re-validated end-to-end after merging (schema executes cleanly,
+all FK/CHECK constraints and the `transaction_participants` M:N junction
+still resolve correctly).
+
+**Known follow-up (not blocking):** `docs/erd_diagram.drawio` (the editable
+source) wasn't updated alongside the new `docs/erd_diagram.png` — the PNG
+was re-exported from a rebuilt diagram, but the `.drawio` file in the repo
+still reflects the earlier version. It's a good source-of-truth diagram, so
+worth reconciling before final submission. Also a couple of minor labels
+in the new PNG are worth a quick pass: `discription` → `description`,
+`reverse_transaction_id` → `reverses_transaction_id` (matches the actual
+column name), and the `transaction_participants` box shows `user_id`
+listed twice where the fourth field should read `role`.
 
 ## Database Design (Week 2)
 
