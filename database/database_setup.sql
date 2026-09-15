@@ -51,7 +51,8 @@ CREATE TABLE transaction_categories (
     category_code    VARCHAR(30)   NOT NULL UNIQUE COMMENT 'Stable machine key used by etl/categorize.py',
     category_name    VARCHAR(100)  NOT NULL COMMENT 'Human-readable label for the dashboard',
     description      VARCHAR(255)  NULL,
-    default_direction ENUM('CREDIT','DEBIT') NOT NULL COMMENT 'Whether this category typically increases or decreases balance'
+    default_direction ENUM('CREDIT','DEBIT') NOT NULL COMMENT 'Whether this category typically increases or decreases balance',
+    is_active        BOOLEAN       NOT NULL DEFAULT TRUE COMMENT 'FALSE hides a deprecated category from the dashboard filter list'
 ) ENGINE=InnoDB COMMENT='Lookup of MoMo transaction types (payment, transfer, deposit, withdrawal, etc.)';
 
 -- ---------------------------------------------------------------------
@@ -189,17 +190,17 @@ INSERT INTO users (user_id, full_name, phone_number, is_phone_masked, user_type)
 (10, 'Agent Sophia',       '250790777777', FALSE, 'AGENT');
 
 -- --- transaction_categories -------------------------------------------
-INSERT INTO transaction_categories (category_id, category_code, category_name, description, default_direction) VALUES
-(1, 'RECEIVE_MONEY',       'Incoming Money',              'Money received from another MoMo user',            'CREDIT'),
-(2, 'PAYMENT_CODE_HOLDER', 'Payment to Code Holder',      'Payment to a merchant/till code (TxId payments)',  'DEBIT'),
-(3, 'BANK_DEPOSIT',        'Bank Deposit',                'Cash deposit into the MoMo account from a bank',   'CREDIT'),
-(4, 'TRANSFER_MOBILE',     'Transfer to Mobile Number',   'Peer-to-peer transfer to another mobile number',   'DEBIT'),
-(5, 'AIRTIME_BILL',        'Airtime Bill Payment',        'Airtime top-up purchase',                          'DEBIT'),
-(6, 'CASH_POWER_BILL',     'Cash Power Bill Payment',     'MTN Cash Power (electricity) token purchase',      'DEBIT'),
-(7, 'BUNDLES_PACKS',       'Bundles and Packs Purchase',  'Data/voice bundle purchase',                       'DEBIT'),
-(8, 'THIRD_PARTY_TXN',     'Third Party Transaction',     'Debit initiated by a registered third party',      'DEBIT'),
-(9, 'AGENT_WITHDRAWAL',    'Withdrawal from Agent',       'Cash withdrawal via a MoMo agent',                 'DEBIT'),
-(10,'TRANSACTION_REVERSAL','Transaction Reversal',        'Reversal of a previously completed transaction',   'CREDIT');
+INSERT INTO transaction_categories (category_id, category_code, category_name, description, default_direction, is_active) VALUES
+(1, 'RECEIVE_MONEY',       'Incoming Money',              'Money received from another MoMo user',            'CREDIT', TRUE),
+(2, 'PAYMENT_CODE_HOLDER', 'Payment to Code Holder',      'Payment to a merchant/till code (TxId payments)',  'DEBIT', TRUE),
+(3, 'BANK_DEPOSIT',        'Bank Deposit',                'Cash deposit into the MoMo account from a bank',   'CREDIT', TRUE),
+(4, 'TRANSFER_MOBILE',     'Transfer to Mobile Number',   'Peer-to-peer transfer to another mobile number',   'DEBIT', TRUE),
+(5, 'AIRTIME_BILL',        'Airtime Bill Payment',        'Airtime top-up purchase',                          'DEBIT', TRUE),
+(6, 'CASH_POWER_BILL',     'Cash Power Bill Payment',     'MTN Cash Power (electricity) token purchase',      'DEBIT', TRUE),
+(7, 'BUNDLES_PACKS',       'Bundles and Packs Purchase',  'Data/voice bundle purchase',                       'DEBIT', TRUE),
+(8, 'THIRD_PARTY_TXN',     'Third Party Transaction',     'Debit initiated by a registered third party',      'DEBIT', TRUE),
+(9, 'AGENT_WITHDRAWAL',    'Withdrawal from Agent',       'Cash withdrawal via a MoMo agent',                 'DEBIT', TRUE),
+(10,'TRANSACTION_REVERSAL','Transaction Reversal',        'Reversal of a previously completed transaction',   'CREDIT', TRUE);
 
 -- --- sms_messages (raw, verbatim) -------------------------------------
 INSERT INTO sms_messages (sms_id, address, sms_protocol, sms_type, body, service_center, sms_timestamp, sms_date_sent, readable_date, raw_hash, is_parsed) VALUES
