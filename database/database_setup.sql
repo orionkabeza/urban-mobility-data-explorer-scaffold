@@ -184,7 +184,7 @@ INSERT INTO users (user_id, full_name, phone_number, is_phone_masked, user_type)
 (5, 'Robert Brown',        '250788999999', FALSE, 'CUSTOMER'),
 (6, 'Linda Green',         '*********704', TRUE,  'CUSTOMER'),
 (7, 'Agent John',          '250788999999', FALSE, 'AGENT'),
-(8, 'DIRECT PAYMENT LTD',  NULL,           FALSE, 'MERCHANT')
+(8, 'DIRECT PAYMENT LTD',  NULL,           FALSE, 'MERCHANT'),
 (9, 'Mediatrice UWAYISENGA','250788658286', FALSE, 'CUSTOMER'),
 (10, 'Agent Sophia',       '250790777777', FALSE, 'AGENT');
 
