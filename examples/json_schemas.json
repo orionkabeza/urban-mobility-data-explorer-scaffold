@@ -12,6 +12,19 @@
     "updated_at": "2024-05-10T16:30:58Z"
   },
 
+    "user_list_response": {
+    "_note": "Paginated response shape for GET /users - what web/chart_handler.js would page through for a 'people' filter/search view.",
+    "page": 1,
+    "page_size": 10,
+    "total_count": 10,
+    "results": [
+      { "user_id": 1, "full_name": "Account Holder", "user_type": "CUSTOMER" },
+      { "user_id": 2, "full_name": "Jane Smith", "user_type": "CUSTOMER" },
+      { "user_id": 7, "full_name": "Agent John", "user_type": "AGENT" },
+      { "user_id": 8, "full_name": "DIRECT PAYMENT LTD", "user_type": "MERCHANT" }
+    ]
+  },
+
   "transaction_category": {
     "_maps_to_table": "transaction_categories",
     "category_id": 1,
