@@ -108,12 +108,14 @@ CREATE TABLE transactions (
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT chk_txn_amount_positive CHECK (amount > 0),
     CONSTRAINT chk_txn_fee_nonnegative CHECK (fee >= 0),
-    CONSTRAINT chk_txn_balance_nonnegative CHECK (balance_after IS NULL OR balance_after >= 0)
+    CONSTRAINT chk_txn_balance_nonnegative CHECK (balance_after IS NULL OR balance_after >= 0),
+    CONSTRAINT chk_txn_no_self_reversal CHECK (reverses_transaction_id IS NULL OR reverses_transaction_id <> transaction_id)
 ) ENGINE=InnoDB COMMENT='One row per parsed MoMo SMS transaction';
 
 CREATE INDEX idx_txn_datetime ON transactions (transaction_datetime);
 CREATE INDEX idx_txn_category ON transactions (category_id);
 CREATE INDEX idx_txn_status ON transactions (status);
+CREATE INDEX idx_txn_financial_id ON transactions (financial_transaction_id);
 
 -- ---------------------------------------------------------------------
 -- 5. transaction_participants (junction table -> resolves the
@@ -140,6 +142,7 @@ CREATE TABLE transaction_participants (
 
 CREATE INDEX idx_participant_user ON transaction_participants (user_id);
 CREATE INDEX idx_participant_txn ON transaction_participants (transaction_id);
+CREATE INDEX idx_participant_user_role ON transaction_participants (user_id, role);
 
 -- ---------------------------------------------------------------------
 -- 6. system_logs
