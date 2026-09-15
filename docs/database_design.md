@@ -149,6 +149,20 @@ Result includes, e.g., transaction 9: `AGENT:Agent John | ACCOUNT_HOLDER:Account
 
 ![CRUD operations verified in one batch](screenshots/06_crud_operations.png)
 
+### 5.3 Additional sample query — top senders by total amount
+
+```sql
+SELECT u.full_name, COUNT(*) AS transactions_sent, SUM(t.amount) AS total_sent
+FROM transaction_participants tp
+JOIN users u ON u.user_id = tp.user_id
+JOIN transactions t ON t.transaction_id = tp.transaction_id
+WHERE tp.role = 'SENDER' AND t.status = 'COMPLETED'
+GROUP BY u.full_name
+ORDER BY total_sent DESC;
+```
+
+![Top senders query result](screenshots/09_top_senders_query.png)
+
 ## 6. Unique Rules Enforced (security & accuracy)
 
 Each rule below was actually **triggered against MySQL 8.0** (not just declared) — the screenshots below show the real rejection, confirming CHECK constraints are active on this engine version (they are silently ignored before MySQL 8.0.16).
