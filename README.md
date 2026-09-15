@@ -1,9 +1,8 @@
 # Urban Mobility Data Explorer — MoMo SMS ETL & Dashboard
 
-Week 1 deliverable: team setup and project planning for the Enterprise Web
-Development summative. This project ingests Mobile Money (MoMo) SMS data
-(XML), cleans and categorizes it into a relational database, and serves it
-through a frontend dashboard.
+Week 1-2 deliverables for the Enterprise Web Development summative. This
+project ingests Mobile Money (MoMo) SMS data (XML), cleans and categorizes
+it into a relational database, and serves it through a frontend dashboard.
 
 ## Team Name
 
@@ -42,6 +41,50 @@ frontend dashboard visualizes the processed data.
 | DB schema & loader (`etl/load_db.py`) | Emmanuel Happy Rangira | To Do |
 | Backend API (`api/app.py`, `api/db.py`, `api/schemas.py`) | Emmanuel Happy Rangira | To Do |
 | Frontend dashboard (`index.html`, `web/`) | kmaster-alt | To Do |
+
+## Week 2 Task Assignments
+
+Orion drafted a full working schema (`database/database_setup.sql`,
+`docs/erd_diagram.drawio`, `examples/json_schemas.json`) as a starting point
+so the team could see the whole design at once. **That draft is currently
+all committed under one author** — per the grading rule that individual
+marks come strictly from technical contributions visible in `git log`/`git
+blame`, each owner below needs to re-commit their section themselves
+(edit, extend, or at minimum re-save-and-commit their block) before
+submission, not just leave Orion's draft as-is:
+
+| Task | Owner | Status |
+| --- | --- | --- |
+| `sms_messages` table (DDL, indexes, sample data) | Orion Kabeza | Committed by Orion |
+| ERD render, design doc, MySQL 8.0 verification screenshots, final integration commit merging all table blocks into one working script | Orion Kabeza | Committed by Orion; integration pending until others commit their sections |
+| `transactions` + `transaction_participants` tables (hub + M:N junction, FK/CHECK constraints) | Emmanuel Happy Rangira | Drafted by Orion — needs Emmanuel's own commit |
+| `users` table (DDL/DML) | Kenneth Master | Drafted by Orion — needs Kenneth's own commit |
+| `examples/json_schemas.json` (JSON serialization modeling) | Kenneth Master | Drafted by Orion — needs Kenneth's own commit |
+| `transaction_categories` table (DDL/DML) | Mfura Axel Aubin | Drafted by Orion — needs Mfura's own commit |
+| `docs/erd_diagram.drawio` (editable ERD source) | Mfura Axel Aubin | Drafted by Orion — needs Mfura's own commit |
+| Sample-query section of the design doc, run against MySQL 8.0 | Mfura Axel Aubin | Drafted by Orion — needs Mfura's own commit |
+| `system_logs` table (DDL/DML, ETL audit trail) | Mpamira Ntwali Djibril | Drafted by Orion — needs Djibril's own commit |
+
+## Database Design (Week 2)
+
+The database schema was reverse-engineered directly from `data/raw/momo.xml`
+(11 distinct SMS message shapes: incoming money, payment to code holder,
+bank deposit, transfer to mobile number, airtime/cash power/bundle bill
+payments, third-party debits, agent withdrawals, failures, and reversals).
+
+- **ERD**: [`docs/erd_diagram.png`](docs/erd_diagram.png) (image) /
+  [`docs/erd_diagram.drawio`](docs/erd_diagram.drawio) (editable source —
+  open at [app.diagrams.net](https://app.diagrams.net))
+- **SQL schema**: [`database/database_setup.sql`](database/database_setup.sql)
+  — MySQL 8.0 DDL (6 tables, FK/CHECK constraints, indexes) + sample DML
+- **JSON serialization examples**: [`examples/json_schemas.json`](examples/json_schemas.json)
+- **Full design doc** (rationale, data dictionary, verified queries,
+  constraint-violation screenshots run against real MySQL 8.0):
+  [`docs/database_design.md`](docs/database_design.md)
+
+Six entities: `users`, `transaction_categories`, `sms_messages`,
+`transactions`, `transaction_participants` (the many-to-many junction
+resolving `users` ↔ `transactions`), and `system_logs` (ETL audit trail).
 
 ## Setup & Run Instructions
 

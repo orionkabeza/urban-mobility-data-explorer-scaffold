@@ -1,0 +1,171 @@
+{
+  "_readme": "JSON serialization examples for every entity in database/database_setup.sql. These show how each relational table (and the M:N junction, transaction_participants) would be returned by a future API (see api/schemas.py) or consumed by web/chart_handler.js. Field names mirror SQL column names 1:1 so the mapping is traceable.",
+
+  "user": {
+    "_maps_to_table": "users",
+    "user_id": 2,
+    "full_name": "Jane Smith",
+    "phone_number": "*********013",
+    "is_phone_masked": true,
+    "user_type": "CUSTOMER",
+    "created_at": "2024-05-10T16:30:58Z",
+    "updated_at": "2024-05-10T16:30:58Z"
+  },
+
+  "transaction_category": {
+    "_maps_to_table": "transaction_categories",
+    "category_id": 1,
+    "category_code": "RECEIVE_MONEY",
+    "category_name": "Incoming Money",
+    "description": "Money received from another MoMo user",
+    "default_direction": "CREDIT"
+  },
+
+  "sms_message": {
+    "_maps_to_table": "sms_messages",
+    "sms_id": 1,
+    "address": "M-Money",
+    "sms_protocol": 0,
+    "sms_type": 1,
+    "body": "You have received 2000 RWF from Jane Smith (*********013) on your mobile money account at 2024-05-10 16:30:51. Your new balance:2000 RWF. Financial Transaction Id: 76662021700.",
+    "service_center": "+250788110381",
+    "sms_timestamp": "2024-05-10T16:30:58Z",
+    "sms_date_sent": "2024-05-10T16:30:51Z",
+    "readable_date": "10 May 2024 4:30:58 PM",
+    "raw_hash": "3f5a9c...e21b",
+    "is_parsed": true,
+    "ingested_at": "2024-05-10T16:31:00Z"
+  },
+
+  "transaction_participant": {
+    "_maps_to_table": "transaction_participants",
+    "_note": "The resolved M:N join row between users and transactions.",
+    "participant_id": 1,
+    "transaction_id": 1,
+    "user_id": 2,
+    "role": "SENDER"
+  },
+
+  "system_log": {
+    "_maps_to_table": "system_logs",
+    "log_id": 1,
+    "sms_id": 1,
+    "transaction_id": 1,
+    "stage": "LOAD",
+    "log_level": "INFO",
+    "processing_status": "SUCCESS",
+    "message": "Loaded RECEIVE_MONEY transaction 76662021700",
+    "raw_snippet": null,
+    "created_at": "2024-05-10T16:31:05Z"
+  },
+
+  "transaction_flat": {
+    "_maps_to_table": "transactions",
+    "_note": "Bare row shape, foreign keys only (no joins) - what a raw SELECT * FROM transactions looks like serialized.",
+    "transaction_id": 1,
+    "sms_id": 1,
+    "category_id": 1,
+    "financial_transaction_id": "76662021700",
+    "external_transaction_id": null,
+    "amount": 2000.00,
+    "fee": 0.00,
+    "balance_after": 2000.00,
+    "currency": "RWF",
+    "direction": "CREDIT",
+    "status": "COMPLETED",
+    "transaction_datetime": "2024-05-10T16:30:51Z",
+    "reverses_transaction_id": null,
+    "created_at": "2024-05-10T16:31:00Z"
+  },
+
+  "transaction_detailed": {
+    "_maps_to_table": "transactions + transaction_categories + transaction_participants + users (joined)",
+    "_note": "Complex nested object: what GET /transactions/{id} would return - a full transaction with its category and every participant's user info resolved. This is the primary shape web/chart_handler.js consumes for the dashboard's transaction table/detail view.",
+    "transaction_id": 8,
+    "financial_transaction_id": "13947831685",
+    "external_transaction_id": "47842929",
+    "amount": 25000.00,
+    "fee": 0.00,
+    "balance_after": 4060.00,
+    "currency": "RWF",
+    "direction": "DEBIT",
+    "status": "COMPLETED",
+    "transaction_datetime": "2024-05-14T21:01:00Z",
+    "category": {
+      "category_id": 8,
+      "category_code": "THIRD_PARTY_TXN",
+      "category_name": "Third Party Transaction",
+      "default_direction": "DEBIT"
+    },
+    "participants": [
+      {
+        "role": "SENDER",
+        "user": {
+          "user_id": 1,
+          "full_name": "Account Holder",
+          "phone_number": "250788110381",
+          "user_type": "CUSTOMER"
+        }
+      },
+      {
+        "role": "RECEIVER",
+        "user": {
+          "user_id": 8,
+          "full_name": "DIRECT PAYMENT LTD",
+          "phone_number": null,
+          "user_type": "MERCHANT"
+        }
+      }
+    ],
+    "source_sms": {
+      "sms_id": 8,
+      "readable_date": "14 May 2024 9:01:09 PM",
+      "raw_hash": "9b12ef...a04d"
+    },
+    "reversed_by": null
+  },
+
+  "agent_withdrawal_example": {
+    "_maps_to_table": "transactions + transaction_participants (3-party example)",
+    "_note": "Demonstrates why transaction_participants is a real M:N junction and not just sender/receiver columns: an agent withdrawal names two distinct people for one transaction.",
+    "transaction_id": 9,
+    "financial_transaction_id": "98765432101",
+    "amount": 15000.00,
+    "fee": 100.00,
+    "balance_after": 6060.00,
+    "direction": "DEBIT",
+    "status": "COMPLETED",
+    "category": { "category_code": "AGENT_WITHDRAWAL", "category_name": "Withdrawal from Agent" },
+    "participants": [
+      { "role": "ACCOUNT_HOLDER", "user": { "user_id": 1, "full_name": "Account Holder" } },
+      { "role": "AGENT", "user": { "user_id": 7, "full_name": "Agent John", "user_type": "AGENT" } }
+    ]
+  },
+
+  "reversal_example": {
+    "_maps_to_table": "transactions (self-referencing reverses_transaction_id)",
+    "_note": "A REVERSED-status transaction linking back to the original via financial_transaction_id continuity.",
+    "transaction_id": 11,
+    "status": "REVERSED",
+    "direction": "CREDIT",
+    "amount": 2000.00,
+    "balance_after": 6060.00,
+    "reverses": {
+      "transaction_id": 1,
+      "financial_transaction_id": "76662021700",
+      "original_status": "COMPLETED"
+    }
+  },
+
+  "dashboard_analytics_example": {
+    "_note": "Aggregate response shape for an endpoint like GET /analytics/by-category - what web/chart_handler.js feeds into a chart.",
+    "generated_at": "2024-05-31T00:00:00Z",
+    "currency": "RWF",
+    "totals_by_category": [
+      { "category_code": "BANK_DEPOSIT", "category_name": "Bank Deposit", "transaction_count": 1, "total_amount": 40000.00 },
+      { "category_code": "THIRD_PARTY_TXN", "category_name": "Third Party Transaction", "transaction_count": 1, "total_amount": 25000.00 },
+      { "category_code": "AGENT_WITHDRAWAL", "category_name": "Withdrawal from Agent", "transaction_count": 1, "total_amount": 15000.00 },
+      { "category_code": "TRANSFER_MOBILE", "category_name": "Transfer to Mobile Number", "transaction_count": 1, "total_amount": 10000.00 }
+    ]
+  }
+}
