@@ -109,12 +109,14 @@ CREATE TABLE transactions (
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT chk_txn_amount_positive CHECK (amount > 0),
     CONSTRAINT chk_txn_fee_nonnegative CHECK (fee >= 0),
-    CONSTRAINT chk_txn_balance_nonnegative CHECK (balance_after IS NULL OR balance_after >= 0)
+    CONSTRAINT chk_txn_balance_nonnegative CHECK (balance_after IS NULL OR balance_after >= 0),
+    CONSTRAINT chk_txn_no_self_reversal CHECK (reverses_transaction_id IS NULL OR reverses_transaction_id <> transaction_id)
 ) ENGINE=InnoDB COMMENT='One row per parsed MoMo SMS transaction';
 
 CREATE INDEX idx_txn_datetime ON transactions (transaction_datetime);
 CREATE INDEX idx_txn_category ON transactions (category_id);
 CREATE INDEX idx_txn_status ON transactions (status);
+CREATE INDEX idx_txn_financial_id ON transactions (financial_transaction_id);
 
 -- ---------------------------------------------------------------------
 -- 5. transaction_participants (junction table -> resolves the
@@ -141,6 +143,7 @@ CREATE TABLE transaction_participants (
 
 CREATE INDEX idx_participant_user ON transaction_participants (user_id);
 CREATE INDEX idx_participant_txn ON transaction_participants (transaction_id);
+CREATE INDEX idx_participant_user_role ON transaction_participants (user_id, role);
 
 -- ---------------------------------------------------------------------
 -- 6. system_logs
@@ -149,6 +152,7 @@ CREATE INDEX idx_participant_txn ON transaction_participants (transaction_id);
 -- ---------------------------------------------------------------------
 CREATE TABLE system_logs (
     log_id              INT AUTO_INCREMENT PRIMARY KEY,
+    run_id              CHAR(36) NULL COMMENT 'UUID grouping every log entry from one etl/run.py execution, for tracing a single pipeline run',
     sms_id              INT NULL COMMENT 'SMS being processed when this log entry was written, if applicable',
     transaction_id      INT NULL COMMENT 'Resulting transaction, once one exists',
     stage               ENUM('PARSE','CLEAN','CATEGORIZE','LOAD') NOT NULL,
@@ -162,7 +166,9 @@ CREATE TABLE system_logs (
         ON UPDATE CASCADE ON DELETE SET NULL,
     CONSTRAINT fk_log_txn
         FOREIGN KEY (transaction_id) REFERENCES transactions (transaction_id)
-        ON UPDATE CASCADE ON DELETE SET NULL
+        ON UPDATE CASCADE ON DELETE SET NULL,
+    CONSTRAINT chk_log_snippet_only_on_failure
+        CHECK (processing_status = 'FAILED' OR raw_snippet IS NULL)
 ) ENGINE=InnoDB COMMENT='ETL pipeline audit trail, including dead-letter records for unparsed SMS';
 
 CREATE INDEX idx_log_stage_status ON system_logs (stage, processing_status);
@@ -245,14 +251,13 @@ INSERT INTO transaction_participants (transaction_id, user_id, role) VALUES
 (11, 1, 'RECEIVER');
 
 -- --- system_logs -----------------------------------------------------
-INSERT INTO system_logs (sms_id, transaction_id, stage, log_level, processing_status, message, raw_snippet) VALUES
-(1, 1,  'LOAD',        'INFO',    'SUCCESS', 'Loaded RECEIVE_MONEY transaction 76662021700', NULL),
-(2, 2,  'CATEGORIZE',  'INFO',    'SUCCESS', 'Matched PAYMENT_CODE_HOLDER pattern "TxId: ... payment of"', NULL),
-(4, 4,  'CLEAN',       'INFO',    'SUCCESS', 'Normalized phone 250791666666 and amount 10000', NULL),
-(10,10, 'LOAD',        'WARNING', 'SUCCESS', 'Transaction loaded with status FAILED; balance_after left NULL', NULL),
-(NULL, NULL, 'PARSE',  'ERROR',   'FAILED',  'Unrecognized SMS body pattern; routed to dead-letter', 'Kanda*182*16# wiyandikishe muri poromosiyo...'),
-(11,11, 'CATEGORIZE',  'INFO',    'SUCCESS', 'Linked reversal to original financial_transaction_id 76662021700', NULL);
-
+INSERT INTO system_logs (run_id, sms_id, transaction_id, stage, log_level, processing_status, message, raw_snippet) VALUES
+('a1b2c3d4-0001-4000-8000-000000000001', 1, 1,  'LOAD',        'INFO',    'SUCCESS', 'Loaded RECEIVE_MONEY transaction 76662021700', NULL),
+('a1b2c3d4-0001-4000-8000-000000000001', 2, 2,  'CATEGORIZE',  'INFO',    'SUCCESS', 'Matched PAYMENT_CODE_HOLDER pattern "TxId: ... payment of"', NULL),
+('a1b2c3d4-0001-4000-8000-000000000001', 4, 4,  'CLEAN',       'INFO',    'SUCCESS', 'Normalized phone 250791666666 and amount 10000', NULL),
+('a1b2c3d4-0001-4000-8000-000000000001', 10,10, 'LOAD',        'WARNING', 'SUCCESS', 'Transaction loaded with status FAILED; balance_after left NULL', NULL),
+('a1b2c3d4-0001-4000-8000-000000000001', NULL, NULL, 'PARSE',  'ERROR',   'FAILED',  'Unrecognized SMS body pattern; routed to dead-letter', 'Kanda*182*16# wiyandikishe muri poromosiyo...'),
+('a1b2c3d4-0001-4000-8000-000000000001', 11,11, 'CATEGORIZE',  'INFO',    'SUCCESS', 'Linked reversal to original financial_transaction_id 76662021700', NULL);
 -- =====================================================================
 -- SAMPLE CRUD / QUERY OPERATIONS (see docs/database_design.md for
 -- annotated output and screenshots run against MySQL 8.0)
