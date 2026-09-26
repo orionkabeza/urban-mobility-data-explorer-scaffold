@@ -106,11 +106,10 @@ CREATE TABLE transactions (
         ON UPDATE CASCADE ON DELETE RESTRICT,
     CONSTRAINT fk_txn_reversal
         FOREIGN KEY (reverses_transaction_id) REFERENCES transactions (transaction_id)
-        ON UPDATE CASCADE ON DELETE RESTRICT,
+        ON UPDATE RESTRICT ON DELETE RESTRICT,
     CONSTRAINT chk_txn_amount_positive CHECK (amount > 0),
     CONSTRAINT chk_txn_fee_nonnegative CHECK (fee >= 0),
-    CONSTRAINT chk_txn_balance_nonnegative CHECK (balance_after IS NULL OR balance_after >= 0),
-    CONSTRAINT chk_txn_no_self_reversal CHECK (reverses_transaction_id IS NULL OR reverses_transaction_id <> transaction_id)
+    CONSTRAINT chk_txn_balance_nonnegative CHECK (balance_after IS NULL OR balance_after >= 0)
 ) ENGINE=InnoDB COMMENT='One row per parsed MoMo SMS transaction';
 
 CREATE INDEX idx_txn_datetime ON transactions (transaction_datetime);

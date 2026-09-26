@@ -1,11 +1,9 @@
 # API Documentation — MoMo SMS Transactions REST API
 
-Base URL (local): `http://localhost:8000`
-Auth: HTTP Basic Auth on every endpoint (see `api/auth.py`; credentials
-default to `admin` / `changeme` until the real check is implemented).
+Task 4 (API Documentation) of the "Building and Securing a REST API" assignment. Owner: Kenneth.
 
-<!-- TODO: once auth is implemented, replace the response examples below
-     with actual curl/Postman output. -->
+Base URL (local): `http://localhost:8000`
+Auth: HTTP Basic Auth on every endpoint (see `api/auth.py` — credentials default to `admin` / `changeme` until Emmanuel finishes the real check).
 
 ## GET /transactions
 
@@ -78,8 +76,6 @@ curl -u admin:changeme -X POST http://localhost:8000/transactions \
   "sender": { "name": "Test Sender", "phone": "250780000000" }
 }
 ```
-<!-- TODO: once field validation is added to POST, document the required
-     fields here and add a 400 example for a request missing them. -->
 
 **Error Codes**
 | Code | Meaning |
@@ -126,12 +122,4 @@ curl -u admin:changeme -X DELETE http://localhost:8000/transactions/1
 
 ## Security notes
 
-<!-- TODO: include this in the written report alongside the Basic Auth
-     weakness explanation. -->
-
-Basic Auth sends credentials base64-encoded (not encrypted) on every
-request — anyone who can see the traffic (no HTTPS, a shared proxy, browser
-history in some clients) can read them directly. Stronger alternatives:
-**JWT** (short-lived signed tokens, no credentials sent after login) or
-**OAuth2** (delegated, revocable, scoped access without ever sharing a
-password with this API directly).
+Basic Auth sends credentials base64-encoded (not encrypted) on every request — anyone who can see the traffic (no HTTPS, a shared proxy, browser history in some clients) can read them directly. Stronger alternatives: **JWT** (short-lived signed tokens, no credentials sent after login) or **OAuth2** (delegated, revocable, scoped access without ever sharing a password with this API directly).
