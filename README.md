@@ -95,6 +95,37 @@ Six entities: `users`, `transaction_categories`, `sms_messages`,
 `transactions`, `transaction_participants` (the many-to-many junction
 resolving `users` ↔ `transactions`), and `system_logs` (ETL audit trail).
 
+## Week 3 — Building and Securing a REST API
+
+Canvas deliverable, due 2026-09-30. Uses a new dataset
+(`data/raw/modified_sms_v2.xml`, 1,691 SMS records — gitignored like
+`momo.xml`, each teammate needs their own copy) and a different stack than
+Weeks 1-2: a **plain Python `http.server`** REST API (no FastAPI/Flask) over
+**in-memory storage**, not the MySQL schema from Week 2.
+
+| Task | Owner | File(s) | Status |
+| --- | --- | --- | --- |
+| Data Parsing (XML → JSON) | Orion Kabeza | `dsa/parse_sms.py`, `dsa/storage.py` | Done |
+| API CRUD Endpoints | Emmanuel Happy Rangira | `api/app.py` | Skeleton ready — routing/CRUD wired, auth hook pending |
+| Auth & Security (Basic Auth, 401, weakness write-up) | Emmanuel Happy Rangira | `api/auth.py` | TODO — see file |
+| API Documentation | Kenneth Master | `docs/api_docs.md` | Skeleton ready — needs real screenshots once auth is done |
+| DSA Integration (linear search vs. dict lookup, benchmark, reflection) | Mpamira Ntwali Djibril | `dsa/search_benchmark.py` | TODO — see file |
+| Testing & Validation (curl/Postman screenshots) | Mfura Axel Aubin | `screenshots/` | TODO — see `screenshots/README.md` |
+
+1,682 of 1,691 records parse cleanly into transactions (8 OTP messages are
+correctly excluded as non-transactional, 1 malformed record goes to
+`data/processed/dead_letter_sms.json`).
+
+Run the API locally:
+```bash
+python3 -m dsa.parse_sms      # (re)generates data/processed/transactions.json
+python3 -m api.app            # serves http://localhost:8000, Basic Auth required
+```
+
+Deliverables outside this repo: the team participation sheet (team lead
+only — Orion) and the PDF report (security intro, endpoint docs, DSA
+comparison, Basic Auth reflection).
+
 ## Setup & Run Instructions
 
 ```bash
@@ -117,6 +148,10 @@ cp .env.example .env
 
 # 6. Serve the frontend dashboard
 ./scripts/serve_frontend.sh
+
+# 7. Run the Week 3 REST API (see "Week 3" section above)
+python3 -m dsa.parse_sms
+python3 -m api.app
 ```
 
 _Instructions will be filled in as each stage (ETL, API, frontend) is

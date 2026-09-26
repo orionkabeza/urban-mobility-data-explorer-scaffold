@@ -1,6 +1,5 @@
 lxml
 python-dateutil
 
-# Optional / bonus: REST API layer for the dashboard
-# fastapi
-# uvicorn
+# Week 3 REST API (dsa/, api/): stdlib only per the assignment spec
+# (http.server, xml.etree.ElementTree, json) - no FastAPI/uvicorn needed.

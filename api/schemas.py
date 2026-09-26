@@ -1,1 +1,2 @@
-"""Request/response data schemas (e.g. Pydantic models) for the API layer."""
+"""Placeholder — no framework response models here; see dsa/parse_sms.py for
+the transaction record shape."""
