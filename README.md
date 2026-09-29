@@ -32,15 +32,15 @@ Once the data is ready, a lightweight frontend dashboard is used to display and 
 | --- | --- | --- |
 | Repo setup & invite collaborators | Orion Kabeza | Done |
 | Project directory scaffold | Orion Kabeza | Done |
-| README (team, description, links) | Orion Kabeza | In Progress |
-| System architecture diagram (draw.io/Miro) | aubin_00 | To Do |
+| README (team, description, links) | Orion Kabeza | Done |
+| System architecture diagram (draw.io/Miro) | aubin_00 | Done |
 | Scrum board setup (GitHub Projects/Trello/Jira) | aubin_00 | Done |
-| XML parsing (`etl/parse_xml.py`, `tests/test_parse_xml.py`) | Orion Kabeza | To Do |
-| Cleaning & normalization (`etl/clean_normalize.py`, `tests/test_clean_normalize.py`) | Mpamira Ntwali Djibril | To Do |
-| Categorization rules (`etl/categorize.py`, `tests/test_categorize.py`) | Mpamira Ntwali Djibril | To Do |
-| DB schema & loader (`etl/load_db.py`) | Emmanuel Happy Rangira | To Do |
-| Backend API (`api/app.py`, `api/db.py`, `api/schemas.py`) | Emmanuel Happy Rangira | To Do |
-| Frontend dashboard (`index.html`, `web/`) | kmaster-alt | To Do |
+| XML parsing (`etl/parse_xml.py`, `tests/test_parse_xml.py`) | Orion Kabeza | Done |
+| Cleaning & normalization (`etl/clean_normalize.py`, `tests/test_clean_normalize.py`) | Mpamira Ntwali Djibril | Done |
+| Categorization rules (`etl/categorize.py`, `tests/test_categorize.py`) | Mpamira Ntwali Djibril | Done |
+| DB schema & loader (`etl/load_db.py`) | Emmanuel Happy Rangira | Done |
+| Backend API (`api/app.py`, `api/db.py`, `api/schemas.py`) | Emmanuel Happy Rangira | Done |
+| Frontend dashboard (`index.html`, `web/`) | kmaster-alt | Done |
 
 ## Week 2 Task Assignments
 
