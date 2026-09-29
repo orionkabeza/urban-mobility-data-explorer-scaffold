@@ -1,18 +1,3 @@
-"""REST API for MoMo SMS transactions, built on Python's http.server (no
-external framework).
-
-Endpoints (all require Basic Auth - see api/auth.py):
-    GET    /transactions       list all transactions
-    GET    /transactions/{id}  view one transaction
-    POST   /transactions       add a new transaction
-    PUT    /transactions/{id}  update an existing transaction
-    DELETE /transactions/{id}  delete a transaction
-
-Run: python -m api.app  (serves on API_HOST:API_PORT, see .env.example)
-"""
-
-from __future__ import annotations
-
 import json
 import os
 import re
@@ -51,7 +36,8 @@ class TransactionRequestHandler(BaseHTTPRequestHandler):
         try:
             ok = check_basic_auth(self.headers.get("Authorization"))
         except NotImplementedError:
-            self._send_json(501, {"error": "Auth not implemented yet - see api/auth.py TODO"})
+            self._send_json(
+                501, {"error": "Auth not implemented yet - see api/auth.py TODO"})
             return False
         if not ok:
             self.send_response(401)
@@ -90,7 +76,8 @@ class TransactionRequestHandler(BaseHTTPRequestHandler):
         if body is None:
             self._send_json(400, {"error": "Request body must be valid JSON"})
             return
-        # TODO: validate required fields before creating the record.
+        # TODO(Emmanuel): validate required fields (amount, type, etc.) and
+        # return 400 with a clear message instead of accepting anything.
         record = STORE.create(body)
         self._send_json(201, record)
 
@@ -125,15 +112,16 @@ class TransactionRequestHandler(BaseHTTPRequestHandler):
         else:
             self._send_json(404, {"error": "Transaction not found"})
 
-    def log_message(self, format: str, *args) -> None:  # noqa: A002
-        pass
+    def log_message(self, format: str, *args) -> None:  # noqa: A002 - stdlib signature
+        pass  # keep test runs quiet; re-enable for debugging if you want request logs
 
 
 def run(host: str | None = None, port: int | None = None) -> None:
     host = host or os.environ.get("API_HOST", "0.0.0.0")
     port = port or int(os.environ.get("API_PORT", "8000"))
     server = ThreadingHTTPServer((host, port), TransactionRequestHandler)
-    print(f"Serving {len(STORE.list())} transactions on http://{host}:{port} (Basic Auth required)")
+    print(
+        f"Serving {len(STORE.list())} transactions on http://{host}:{port} (Basic Auth required)")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
