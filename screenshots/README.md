@@ -1,7 +1,9 @@
-# Screenshots
+# Screenshots — Task 6 (Testing & Validation)
 
-4 screenshots are needed (curl or Postman, either is fine) once auth is
-implemented:
+Owner: Aubin.
+
+The assignment requires exactly these 4 screenshots (curl or Postman,
+either is fine) once Emmanuel's `api/auth.py` is finished:
 
 1. **`01_get_success.png`** — a successful `GET /transactions` (or
    `/transactions/{id}`) with valid Basic Auth credentials, showing `200 OK`
@@ -19,9 +21,7 @@ implemented:
 ```bash
 cd urban-mobility-data-explorer-scaffold
 python3 -m api.app
-# serves on http://localhost:8000 — see docs/api_docs.md for the curl
-# commands to run against it (swap in real credentials once api/auth.py
-# is done)
+# serves on http://localhost:8000
 ```
 
 Postman: import the base URL above, set Basic Auth on each request under
