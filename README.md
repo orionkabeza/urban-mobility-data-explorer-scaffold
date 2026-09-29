@@ -166,3 +166,6 @@ The pipeline: `MoMo SMS XML` -> ETL (`parse -> clean -> categorize -> load`) -> 
 ## Scrum Board
 
 [Trello board](https://trello.com/invite/b/6a9b871ca635a4268f44d10d/ATTIeac71249d169effb450ef9518f18446385DF072A/my-trello-board)
+
+## Team Tasksheet
+(https://docs.google.com/spreadsheets/d/1ZiOrJJSOua5e3nN7Ptt-UnA9-tS7xbbK1Fa_8zxyBb8/edit?usp=sharing)
